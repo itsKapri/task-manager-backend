@@ -40,13 +40,13 @@ router.post('/', authenticate, async (req, res) => {
 });
 
 router.get('/', authenticate, async (req, res) => {
-  const tasks = await Task.find({ userId: req.user.id }).select('title description createdAt'); 
+  const tasks = await Task.find({ userId: req.user.id });
   res.json(tasks);
 });
 
 
 router.get('/:id', authenticate, async (req, res) => {
-  const task = await Task.findById(req.params.id).select('title description createdAt');
+  const task = await Task.findById(req.params.id);
   if (!task || task.userId.toString() !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
   res.json(task);
 });
