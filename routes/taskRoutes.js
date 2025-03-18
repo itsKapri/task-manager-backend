@@ -33,9 +33,6 @@ const authenticate = (req, res, next) => {
   
 
 router.post('/', authenticate, async (req, res) => {
-    console.log("post call in task");
-    console.log("req.user.id", req.user.id);
-    console.log("Received request body:", req.body);
   const { title, description } = req.body;
   const newTask = new Task({ userId: req.user.id, title, description });
   await newTask.save();
@@ -43,12 +40,13 @@ router.post('/', authenticate, async (req, res) => {
 });
 
 router.get('/', authenticate, async (req, res) => {
-  const tasks = await Task.find({ userId: req.user.id });
+  const tasks = await Task.find({ userId: req.user.id }).select('title description createdAt'); 
   res.json(tasks);
 });
 
+
 router.get('/:id', authenticate, async (req, res) => {
-  const task = await Task.findById(req.params.id);
+  const task = await Task.findById(req.params.id).select('title description createdAt');
   if (!task || task.userId.toString() !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
   res.json(task);
 });
