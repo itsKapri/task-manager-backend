@@ -7,7 +7,6 @@ const router = express.Router();
 // Middleware for authentication
 const authenticate = (req, res, next) => {
     const authHeader = req.header('Authorization');
-    console.log("authHeader:", authHeader);
 
     if (!authHeader) {
         return res.status(401).json({ error: 'Access denied, no token provided' });
